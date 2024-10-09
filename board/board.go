@@ -36,7 +36,7 @@ func (b Board) pointIcon(i, j int) string {
 	case b.hasBlack(i, j):
 		return "○"
 	default:
-		return "┼"
+		return "·"
 	}
 }
 
@@ -45,9 +45,7 @@ func (b Board) Print() {
 
 	for i := 0; i < b.Size; i++ {
 		for j := 0; j < b.Size; j++ {
-			fmt.Print("─")
-			fmt.Print(b.pointIcon(i, j))
-			fmt.Print("─")
+			fmt.Print(" " + b.pointIcon(i, j) + " ")
 		}
 		fmt.Println()
 	}
