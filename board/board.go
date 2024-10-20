@@ -3,6 +3,7 @@ package board
 import (
 	"fmt"
 	"math/rand"
+	"slices"
 )
 
 type Board struct {
@@ -130,3 +131,5 @@ func (b *Board) rightShiftMod(shift int) {
 	for index, element := range slices.Backward(b.White[:]) {
 		b.White[index] = (element >> shift) + leftover
 		leftover = element << (64 - shift)
+	}
+}
