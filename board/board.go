@@ -72,3 +72,33 @@ func (b *Board) PlaceBlack(i, j int) {
 	shift := uint(point % 64)
 	b.Black[index] = b.Black[index] | (1 << shift)
 }
+
+func (b *Board) DownShift(shift int) { b.LeftShift(shift * b.Size) }
+
+func (b *Board) LeftShift(shift int) {
+	if shift >= 64 {
+		b.leftShiftArray(shift / 64)
+	}
+	b.leftShiftMod(shift % 64)
+}
+
+func (b *Board) leftShiftArray(shift int) {
+	for shift > 0 {
+		b.Black[0], b.Black[1], b.Black[2], b.Black[3], b.Black[4], b.Black[5] = 0, b.Black[0], b.Black[1], b.Black[2], b.Black[3], b.Black[4]
+		b.White[0], b.White[1], b.White[2], b.White[3], b.White[4], b.White[5] = 0, b.White[0], b.White[1], b.White[2], b.White[3], b.White[4]
+		shift -= 1
+	}
+}
+
+func (b *Board) leftShiftMod(shift int) {
+	var leftover uint64 = 0
+	for index, element := range b.Black {
+		b.Black[index] = (element << shift) + leftover
+		leftover = element >> (64 - shift)
+	}
+	leftover = 0
+	for index, element := range b.White {
+		b.White[index] = (element << shift) + leftover
+		leftover = element >> (64 - shift)
+	}
+}
