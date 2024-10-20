@@ -102,3 +102,31 @@ func (b *Board) leftShiftMod(shift int) {
 		leftover = element >> (64 - shift)
 	}
 }
+
+func (b *Board) UpShift(shift int) { b.RightShift(shift * b.Size) }
+
+func (b *Board) RightShift(shift int) {
+	if shift >= 64 {
+		b.rightShiftArray(shift / 64)
+	}
+	b.rightShiftMod(shift % 64)
+}
+
+func (b *Board) rightShiftArray(shift int) {
+	for shift > 0 {
+		b.Black[0], b.Black[1], b.Black[2], b.Black[3], b.Black[4], b.Black[5] = b.Black[1], b.Black[2], b.Black[3], b.Black[4], b.White[5], 0
+		b.White[0], b.White[1], b.White[2], b.White[3], b.White[4], b.White[5] = b.White[1], b.White[2], b.White[3], b.White[4], b.White[5], 0
+		shift -= 1
+	}
+}
+
+func (b *Board) rightShiftMod(shift int) {
+	var leftover uint64 = 0
+	for index, element := range slices.Backward(b.Black[:]) {
+		b.Black[index] = (element >> shift) + leftover
+		leftover = element << (64 - shift)
+	}
+	leftover = 0
+	for index, element := range slices.Backward(b.White[:]) {
+		b.White[index] = (element >> shift) + leftover
+		leftover = element << (64 - shift)
