@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"slices"
+	"strings"
 )
 
 type Board struct {
@@ -41,15 +42,19 @@ func (b Board) pointIcon(i, j int) string {
 	}
 }
 
-func (b Board) Print() {
-	fmt.Println(b)
+func (b Board) Print() { fmt.Println(b) }
+
+func (b Board) String() string {
+	var sb strings.Builder
 
 	for i := 0; i < b.Size; i++ {
 		for j := 0; j < b.Size; j++ {
-			fmt.Print(" " + b.pointIcon(i, j) + " ")
+			sb.WriteString(" " + b.pointIcon(i, j) + " ")
 		}
-		fmt.Println()
+		sb.WriteString("\n")
 	}
+
+	return sb.String()
 }
 
 func (b Board) RandomEmpty() (int, int) {
@@ -64,14 +69,33 @@ func (b *Board) PlaceWhite(i, j int) {
 	point := b.Size*i + j
 	index := point / 64
 	shift := uint(point % 64)
-	b.White[index] = b.White[index] | (1 << shift)
+	b.White[index] |= (1 << shift)
+}
+
+func (b *Board) RemoveWhite(i, j int) {
+	point := b.Size*i + j
+	index := point / 64
+	shift := uint(point % 64)
+	b.White[index] &= ^(1 << shift)
 }
 
 func (b *Board) PlaceBlack(i, j int) {
 	point := b.Size*i + j
 	index := point / 64
 	shift := uint(point % 64)
-	b.Black[index] = b.Black[index] | (1 << shift)
+	b.Black[index] |= (1 << shift)
+}
+
+func (b *Board) RemoveBlack(i, j int) {
+	point := b.Size*i + j
+	index := point / 64
+	shift := uint(point % 64)
+	b.Black[index] &= ^(1 << shift)
+}
+
+func (b *Board) RemoveStone(i, j int) {
+	b.RemoveWhite(i, j)
+	b.RemoveBlack(i, j)
 }
 
 func (b *Board) DownShift(shift int) { b.LeftShift(shift * b.Size) }
