@@ -100,12 +100,12 @@ func (b *Board) RemoveStone(i, j int) {
 	b.RemoveBlack(i, j)
 }
 
-func (b *Board) PlaceBlacks(positions *Bitboard) {
-	b.Black = Or(&b.Black, positions)
+func (b *Board) PlaceBlacks(points *Bitboard) {
+	b.Black = Or(&b.Black, points)
 }
 
-func (b *Board) PlaceWhites(positions *Bitboard) {
-	b.White = Or(&b.White, positions)
+func (b *Board) PlaceWhites(points *Bitboard) {
+	b.White = Or(&b.White, points)
 }
 
 func (b *Board) DownShift(shift int) { b.LeftShift(shift * b.Size) }
@@ -178,4 +178,14 @@ func Or(bb1 *Bitboard, bb2 *Bitboard) Bitboard {
 
 func (bitboard *Bitboard) Not() Bitboard {
 	return Bitboard{^bitboard[0], ^bitboard[1], ^bitboard[2], ^bitboard[3], ^bitboard[4], ^bitboard[5]}
+}
+
+func (bitboard *Bitboard) Remove(points *Bitboard) {
+	safe := points.Not()
+	*bitboard = And(bitboard, &safe)
+}
+
+func (b *Board) RemoveStones(points *Bitboard) {
+	b.White.Remove(points)
+	b.Black.Remove(points)
 }
