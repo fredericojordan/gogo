@@ -101,11 +101,11 @@ func (b *Board) RemoveStone(i, j int) {
 }
 
 func (b *Board) PlaceBlacks(positions *Bitboard) {
-	b.Black = BitboardOr(&b.Black, positions)
+	b.Black = Or(&b.Black, positions)
 }
 
 func (b *Board) PlaceWhites(positions *Bitboard) {
-	b.White = BitboardOr(&b.White, positions)
+	b.White = Or(&b.White, positions)
 }
 
 func (b *Board) DownShift(shift int) { b.LeftShift(shift * b.Size) }
@@ -168,18 +168,14 @@ func (b *Board) rightShiftMod(shift int) {
 	}
 }
 
-func BitboardAnd(bb1 *Bitboard, bb2 *Bitboard) Bitboard {
-	var result Bitboard
-	for i := 0; i < 6; i++ {
-		result[i] = bb1[i] & bb2[i]
-	}
-	return result
+func And(bb1 *Bitboard, bb2 *Bitboard) Bitboard {
+	return Bitboard{bb1[0] & bb2[0], bb1[1] & bb2[1], bb1[2] & bb2[2], bb1[3] & bb2[3], bb1[4] & bb2[4], bb1[5] & bb2[5]}
 }
 
-func BitboardOr(bb1 *Bitboard, bb2 *Bitboard) Bitboard {
-	var result Bitboard
-	for i := 0; i < 6; i++ {
-		result[i] = bb1[i] | bb2[i]
-	}
-	return result
+func Or(bb1 *Bitboard, bb2 *Bitboard) Bitboard {
+	return Bitboard{bb1[0] | bb2[0], bb1[1] | bb2[1], bb1[2] | bb2[2], bb1[3] | bb2[3], bb1[4] | bb2[4], bb1[5] | bb2[5]}
+}
+
+func (bitboard *Bitboard) Not() Bitboard {
+	return Bitboard{^bitboard[0], ^bitboard[1], ^bitboard[2], ^bitboard[3], ^bitboard[4], ^bitboard[5]}
 }
