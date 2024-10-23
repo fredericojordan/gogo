@@ -11,10 +11,9 @@ func main() {
 }
 
 func puzzles() {
-	var b board.Board
-	b = board.Board{9, [6]uint64{211661359156224}, [6]uint64{252483329525809152}}
+	b := board.Board{9, board.Bitboard{211661359156224}, board.Bitboard{252483329525809152}}
 	b.Print()
-	b = board.Board{9, [6]uint64{941625864}, [6]uint64{1031866943494}}
+	b = board.Board{9, board.Bitboard{941625864}, board.Bitboard{1031866943494}}
 	b.Print()
 }
 

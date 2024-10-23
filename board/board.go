@@ -7,10 +7,12 @@ import (
 	"strings"
 )
 
+type Bitboard [6]uint64
+
 type Board struct {
 	Size  int
-	Black [6]uint64
-	White [6]uint64
+	Black Bitboard
+	White Bitboard
 }
 
 func (b Board) hasBlack(i, j int) bool {
