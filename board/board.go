@@ -100,6 +100,14 @@ func (b *Board) RemoveStone(i, j int) {
 	b.RemoveBlack(i, j)
 }
 
+func (b *Board) PlaceBlacks(positions *Bitboard) {
+	b.Black = BitboardOr(&b.Black, positions)
+}
+
+func (b *Board) PlaceWhites(positions *Bitboard) {
+	b.White = BitboardOr(&b.White, positions)
+}
+
 func (b *Board) DownShift(shift int) { b.LeftShift(shift * b.Size) }
 
 func (b *Board) LeftShift(shift int) {
@@ -158,4 +166,20 @@ func (b *Board) rightShiftMod(shift int) {
 		b.White[index] = (element >> shift) + leftover
 		leftover = element << (64 - shift)
 	}
+}
+
+func BitboardAnd(bb1 *Bitboard, bb2 *Bitboard) Bitboard {
+	var result Bitboard
+	for i := 0; i < 6; i++ {
+		result[i] = bb1[i] & bb2[i]
+	}
+	return result
+}
+
+func BitboardOr(bb1 *Bitboard, bb2 *Bitboard) Bitboard {
+	var result Bitboard
+	for i := 0; i < 6; i++ {
+		result[i] = bb1[i] | bb2[i]
+	}
+	return result
 }
